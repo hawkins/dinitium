@@ -6,14 +6,63 @@
 
     <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
 
+    <script>
+        var ipc = require('ipc');
+        // Toggle inventory
+        ipc.on('toggleInventory', function (response) {
+            var e = document.getElementById('inventory-frame');
+            if(e.style.display == 'block') {
+                // Hide it
+                e.style.display = 'none';
+            } else {
+                //// Show it
+                // First load page
+                e.contentWindow.location.reload(true);
+                // Wait for it to load
+                e.onload = function () {
+                    // Hide irrelevant items on page
+                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                    e.contentWindow.document.getElementsByClassName('chat_box')[0].style.display = 'none'; // Chat box
+                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    // Now reveal the frame
+                    e.style.display = 'block';
+                }
+            }
+        });
+        // Toggle profile
+        ipc.on('toggleProfile', function (response) {
+            var e = document.getElementById('profile-frame');
+            if(e.style.display == 'block') {
+                // Hide it
+                e.style.display = 'none';
+            } else {
+                //// Show it
+                // First load page
+                e.contentWindow.location.reload(true);
+                // Wait for it to load
+                e.onload = function () {
+                    // Hide irrelevant items on page
+                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                    e.contentWindow.document.getElementsByClassName('main-banner-container')[0].style.display = 'none'; // Main image banner
+                    e.contentWindow.document.getElementsByTagName('h2')[0].style.display = 'none'; // "USER PROFILE"
+                    e.contentWindow.document.getElementsByTagName('p')[2].style.display = 'none'; // Premium benefits label
+                    e.contentWindow.document.getElementsByClassName('paragraph')[0].style.display = 'none'; // Premium benefits
+                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    // Now reveal the frame
+                    e.style.display = 'block';
+                }
+            }
+        });
+    </script>
+
     <script src="vendor/electron_boilerplate/context_menu.js"></script>
     <script src="vendor/electron_boilerplate/external_links.js"></script>
 
     <script src="app.js"></script>
 </head>
 <body>
+    <iframe id="profile-frame" src="https://www.playinitium.com/profile.jsp" frameborder="0"></iframe>
     <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0"></iframe>
-
     <iframe id="inventory-frame" src="https://www.playinitium.com/inventory.jsp" frameborder="0"></iframe>
 
     <div style="display:none;" class="container">

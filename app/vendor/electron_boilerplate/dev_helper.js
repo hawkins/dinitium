@@ -29,16 +29,15 @@ var setDevMenu = function () {
             label: 'Inventory',
             accelerator: 'CmdOrCtrl+I',
             click: function () {
-                // Ideally we'd toggle an inventory iframe.
-                BrowserWindow.getFocusedWindow().webContents.insertCSS("#inventory-frame {display: block!important}");
-                // BrowserWindow.getFocusedWindow().webContents.executeJavaScript()
+                // Toggle the inventory iframe.
+                BrowserWindow.getFocusedWindow().webContents.send('toggleInventory');
             }
         },{
             label: 'Profile',
             accelerator: 'CmdOrCtrl+P',
             click: function () {
-                // For now, refresh the page.
-                BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
+                // Toggle the profile frame
+                BrowserWindow.getFocusedWindow().webContents.send('toggleProfile');
             }
         }]
     }]);

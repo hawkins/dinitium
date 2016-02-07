@@ -6,6 +6,7 @@ Thumbs.db
 
 /app/spec.js
 /build/*
+/build/
 /releases/*
 /tmp/*
 
