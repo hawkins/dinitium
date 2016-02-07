@@ -1,0 +1,13 @@
+{
+  "name": "dinitium",
+  "productName": "Dinitium",
+  "identifier": "desktop.initium",
+  "description": "A simple desktop application to play Initium.",
+  "version": "0.0.1",
+  "author": "hawkins",
+  "copyright": "© 2016, hawkins",
+  "main": "background.js",
+  "dependencies": {
+    "fs-jetpack": "^0.7.0"
+  }
+}
