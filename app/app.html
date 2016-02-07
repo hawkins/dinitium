@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Electron Boilerplate</title>
+    <title>Dinitium</title>
 
     <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
 
@@ -12,8 +12,10 @@
     <script src="app.js"></script>
 </head>
 <body>
+    <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0">
+    </iframe>
 
-    <div class="container">
+    <div style="display:none;" class="container">
         <h1 id="greet"></h1>
         <p class="subtitle">
             Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
