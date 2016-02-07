@@ -12,8 +12,9 @@
     <script src="app.js"></script>
 </head>
 <body>
-    <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0">
-    </iframe>
+    <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0"></iframe>
+
+    <iframe id="inventory-frame" src="https://www.playinitium.com/inventory.jsp" frameborder="0"></iframe>
 
     <div style="display:none;" class="container">
         <h1 id="greet"></h1>
@@ -25,5 +26,6 @@
         </p>
     </div>
 
+    <script src="../../jquery-2.1.4.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
 </body>
 </html>

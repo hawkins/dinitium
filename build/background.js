@@ -59,6 +59,25 @@ var setDevMenu = function () {
                 electron.app.quit();
             }
         }]
+    },
+    {
+        label: 'Initium',
+        submenu: [{
+            label: 'Inventory',
+            accelerator: 'CmdOrCtrl+I',
+            click: function () {
+                // Ideally we'd toggle an inventory iframe.
+                electron.BrowserWindow.getFocusedWindow().webContents.insertCSS("#inventory-frame {display: block!important}");
+                // BrowserWindow.getFocusedWindow().webContents.executeJavaScript()
+            }
+        },{
+            label: 'Profile',
+            accelerator: 'CmdOrCtrl+P',
+            click: function () {
+                // For now, refresh the page.
+                electron.BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
+            }
+        }]
     }]);
     electron.Menu.setApplicationMenu(devMenu);
 };
