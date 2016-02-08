@@ -17,6 +17,8 @@
     <iframe id="profile-frame" src="https://www.playinitium.com/profile.jsp" frameborder="0"></iframe>
     <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0"></iframe>
     <iframe id="inventory-frame" src="https://www.playinitium.com/inventory.jsp" frameborder="0"></iframe>
+    <div id="character-switch">
+    </div>
 
     <div style="display:none;" class="container">
         <h1 id="greet"></h1>
@@ -78,9 +80,15 @@
                 // Wait for it to load
                 e.onload = function () {
                     // Hide irrelevant items on page
-                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
-                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
-                    e.contentWindow.document.getElementsByClassName('chat_box')[0].style.display = 'none'; // Chat box
+                    try {
+                        e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                        e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                        e.contentWindow.document.getElementsByClassName('chat_box')[0].style.display = 'none'; // Chat box
+                    }
+                    catch (err) {
+                        // Probably not logged in yet
+                        console.log("Encountered error when toggling inventory. Are we logged in yet? " + err);
+                    }
                     // Now reveal the frame
                     e.style.display = 'block';
                 }
@@ -110,12 +118,18 @@
                 // Wait for it to load
                 e.onload = function () {
                     // Hide irrelevant items on page
-                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
-                    e.contentWindow.document.getElementsByClassName('main-banner-container')[0].style.display = 'none'; // Main image banner
-                    e.contentWindow.document.getElementsByTagName('h2')[0].style.display = 'none'; // "USER PROFILE"
-                    e.contentWindow.document.getElementsByTagName('p')[2].style.display = 'none'; // Premium benefits label
-                    e.contentWindow.document.getElementsByClassName('paragraph')[0].style.display = 'none'; // Premium benefits
-                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    try {
+                        e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                        e.contentWindow.document.getElementsByClassName('main-banner-container')[0].style.display = 'none'; // Main image banner
+                        e.contentWindow.document.getElementsByTagName('h2')[0].style.display = 'none'; // "USER PROFILE"
+                        e.contentWindow.document.getElementsByTagName('p')[2].style.display = 'none'; // Premium benefits label
+                        e.contentWindow.document.getElementsByClassName('paragraph')[0].style.display = 'none'; // Premium benefits
+                        e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    }
+                    catch (err) {
+                        // Probably not logged in yet
+                        console.log("Encountered error when toggling profile. Are we logged in yet? " + err);
+                    }
                     // Now reveal the frame
                     e.style.display = 'block';
                 }
@@ -128,6 +142,53 @@
                 return;
             } else {
                 toggleProfile(response);
+            }
+        });
+
+        // Toggle character switcher
+        function toggleCharacterSwitch (response) {
+            var e = document.getElementById('character-switch');
+            var m = document.getElementById('main-frame');
+            // Now toggle
+            if(e.style.display == 'block') {
+                // Hide it
+                e.style.display = 'none';
+                // Resize main frame
+                m.style.height = '100%';
+                m.style.bottom = '0';
+            } else {
+                //// Show it
+                // First load names from the main frame
+                try {
+                    // Find all name switches
+                    var listOfChars = m.contentWindow.document.getElementsByClassName('switch-characters-list')[0];
+                    // For each one:
+                    // ... // Append to character switcher
+                    // ... document.getElementById('character-switch').append(...);
+                    for (var i=0; i < listOfChars.children.length; i++) {
+                        console.log(listOfChars.children[i].children[0]);
+                        // NOTE: NEED TO Modify link to direct to main-frame
+                        e.appendChild(listOfChars.children[i].children[0])
+                    }
+                }
+                catch (err) {
+                    // Probably not logged in yet
+                    console.log("Encountered error when toggling character switch. Are we logged in yet? " + err);
+                }
+                // Now reveal the frame
+                e.style.display = 'block';
+                // Resize main frame
+                m.style.height = '90%';
+                m.style.bottom = '10%';
+            }
+        }
+        ipc.on('toggleCharacterSwitch', function (response) {
+            // Implement toggleCharacterSwitch
+            // Make sure we're not typing in an input field
+            if (isTypingInInputField()) {
+                return;
+            } else {
+                toggleCharacterSwitch(response);
             }
         });
 

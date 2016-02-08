@@ -11,7 +11,7 @@ var setDevMenu = function () {
             }
         },{
             label: 'Toggle DevTools',
-            accelerator: 'Alt+CmdOrCtrl+I',
+            accelerator: 'CmdOrCtrl+Alt+I',
             click: function () {
                 BrowserWindow.getFocusedWindow().toggleDevTools();
             }
@@ -38,6 +38,13 @@ var setDevMenu = function () {
             click: function () {
                 // Toggle the profile frame
                 BrowserWindow.getFocusedWindow().webContents.send('toggleProfile');
+            }
+        },{
+            label: 'Character Switch',
+            accelerator: 'CmdOrCtrl+Alt+S',
+            click: function () {
+                // Toggle the character-switch
+                BrowserWindow.getFocusedWindow().webContents.send('toggleCharacterSwitch');
             }
         }]
     }]);
