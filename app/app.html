@@ -3,57 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>Dinitium</title>
+    <link rel="shortcut icon" type="image/png" href="/images/initiumfavicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="http://playinitium.com/favicon.ico"/>
 
     <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
-
-    <script>
-        var ipc = require('ipc');
-        // Toggle inventory
-        ipc.on('toggleInventory', function (response) {
-            var e = document.getElementById('inventory-frame');
-            if(e.style.display == 'block') {
-                // Hide it
-                e.style.display = 'none';
-            } else {
-                //// Show it
-                // First load page
-                e.contentWindow.location.reload(true);
-                // Wait for it to load
-                e.onload = function () {
-                    // Hide irrelevant items on page
-                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
-                    e.contentWindow.document.getElementsByClassName('chat_box')[0].style.display = 'none'; // Chat box
-                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
-                    // Now reveal the frame
-                    e.style.display = 'block';
-                }
-            }
-        });
-        // Toggle profile
-        ipc.on('toggleProfile', function (response) {
-            var e = document.getElementById('profile-frame');
-            if(e.style.display == 'block') {
-                // Hide it
-                e.style.display = 'none';
-            } else {
-                //// Show it
-                // First load page
-                e.contentWindow.location.reload(true);
-                // Wait for it to load
-                e.onload = function () {
-                    // Hide irrelevant items on page
-                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
-                    e.contentWindow.document.getElementsByClassName('main-banner-container')[0].style.display = 'none'; // Main image banner
-                    e.contentWindow.document.getElementsByTagName('h2')[0].style.display = 'none'; // "USER PROFILE"
-                    e.contentWindow.document.getElementsByTagName('p')[2].style.display = 'none'; // Premium benefits label
-                    e.contentWindow.document.getElementsByClassName('paragraph')[0].style.display = 'none'; // Premium benefits
-                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
-                    // Now reveal the frame
-                    e.style.display = 'block';
-                }
-            }
-        });
-    </script>
 
     <script src="vendor/electron_boilerplate/context_menu.js"></script>
     <script src="vendor/electron_boilerplate/external_links.js"></script>
@@ -75,6 +28,134 @@
         </p>
     </div>
 
-    <script src="../../jquery-2.1.4.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+    <!-- <script src="../../jquery-2.1.4.min.js" onload="window.$ = window.jQuery = module.exports;"></script> -->
+    <script>
+        var ipc = require('ipc');
+
+        // Remove default event listener by disabling all shortcuts
+        // Abuses Nik's implementation in script.js line 941, $(document).keyup(function(event)){...}
+        var iframe = document.getElementById('main-frame');
+        iframe.onload = function () {
+            iframe.contentWindow.disableShortcuts = true;
+
+            // Also, refresh secondary frames
+            if (document.getElementById('inventory-frame').style.display == 'block') {
+                document.getElementById('inventory-frame').src = document.getElementById('inventory-frame').src;
+            }
+            if (document.getElementById('profile-frame').style.display == 'block') {
+                document.getElementById('profile-frame').src = document.getElementById('profile-frame').src;
+            }
+        };
+
+        function isTypingInInputField () {
+            // Determine if we are typing in an input field
+            if (iframe.contentWindow.document.activeElement.tagName == 'INPUT') {
+                // Yes, we are. But have we typed any keys into it?
+                if (iframe.contentWindow.document.activeElement.value == '') {
+                    // No, so probably a menu button called us.
+                    return false;
+                } else {
+                    // Yes, so let's assume the user is just typing
+                    return true;
+                }
+            } else {
+                // It's not selected, so nope!
+                return false;
+            }
+        }
+
+        // Toggle inventory
+        function toggleInventory (response) {
+            var e = document.getElementById('inventory-frame');
+            // Now toggle
+            if(e.style.display == 'block') {
+                // Hide it
+                e.style.display = 'none';
+            } else {
+                //// Show it
+                // First load page
+                e.contentWindow.location.reload(true);
+                // Wait for it to load
+                e.onload = function () {
+                    // Hide irrelevant items on page
+                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    e.contentWindow.document.getElementsByClassName('chat_box')[0].style.display = 'none'; // Chat box
+                    // Now reveal the frame
+                    e.style.display = 'block';
+                }
+            }
+        }
+        ipc.on('toggleInventory', function (response) {
+            // Implement toggleInventory
+            // Make sure we're not typing in an input field
+            if (isTypingInInputField()) {
+                return;
+            } else {
+                toggleInventory(response);
+            }
+        });
+
+        // Toggle profile
+        function toggleProfile (response) {
+            var e = document.getElementById('profile-frame');
+            // Now toggle
+            if(e.style.display == 'block') {
+                // Hide it
+                e.style.display = 'none';
+            } else {
+                //// Show it
+                // First load page
+                e.contentWindow.location.reload(true);
+                // Wait for it to load
+                e.onload = function () {
+                    // Hide irrelevant items on page
+                    e.contentWindow.document.getElementsByClassName('main-page')[0].style.display = 'none'; // Top bar on page
+                    e.contentWindow.document.getElementsByClassName('main-banner-container')[0].style.display = 'none'; // Main image banner
+                    e.contentWindow.document.getElementsByTagName('h2')[0].style.display = 'none'; // "USER PROFILE"
+                    e.contentWindow.document.getElementsByTagName('p')[2].style.display = 'none'; // Premium benefits label
+                    e.contentWindow.document.getElementsByClassName('paragraph')[0].style.display = 'none'; // Premium benefits
+                    e.contentWindow.document.getElementsByClassName('main-buttonbox')[0].style.display = 'none'; // "Back to game" button
+                    // Now reveal the frame
+                    e.style.display = 'block';
+                }
+            }
+        }
+        ipc.on('toggleProfile', function (response) {
+            // Implement toggleProfile
+            // Make sure we're not typing in an input field
+            if (isTypingInInputField()) {
+                return;
+            } else {
+                toggleProfile(response);
+            }
+        });
+
+        //// Key listener changes
+        //// Replaced with simpler menu bar instead
+        // var iframe = document.getElementById('main-frame');
+        // iframe.onload = function () {
+        //     Remove default event listener by disabling all shortcuts
+        //     Abuses Nik's implementation in script.js line 941, $(document).keyup(function(event)){...}
+        //     iframe.contentWindow.disableShortcuts = true;
+        //     // Substitute new event listener
+        //     iframe.contentWindow.document.onkeydown = function (e) {
+        //         var code = e.keyCode ? e.keyCode : e.which;
+        //         // Make sure we're not pressing control (because we use it in menu items)
+        //         if (code === 17) {
+        //             // CTRL is pushed
+        //             return;
+        //         }
+        //         if (code === 73) {
+        //             // Open inventory
+        //             toggleInventory();
+        //         }
+        //         else if (code === 80) {
+        //             // Open profile
+        //             toggleProfile();
+        //         }
+        //     }
+        // }
+    </script>
 </body>
 </html>

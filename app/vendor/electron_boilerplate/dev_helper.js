@@ -27,14 +27,14 @@ var setDevMenu = function () {
         label: 'Initium',
         submenu: [{
             label: 'Inventory',
-            accelerator: 'CmdOrCtrl+I',
+            accelerator: 'I',
             click: function () {
                 // Toggle the inventory iframe.
                 BrowserWindow.getFocusedWindow().webContents.send('toggleInventory');
             }
         },{
             label: 'Profile',
-            accelerator: 'CmdOrCtrl+P',
+            accelerator: 'P',
             click: function () {
                 // Toggle the profile frame
                 BrowserWindow.getFocusedWindow().webContents.send('toggleProfile');
