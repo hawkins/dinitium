@@ -1,9 +1,21 @@
+@font-face {
+    font-family: DOS;
+    src: url(https://www.playinitium.com/DOS.ttf);
+}
+
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     background-color: #0E0B06;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -30,20 +42,7 @@ html, body {
     right: 20%;
     width: 60%;
     max-width: 60%;
-    height: 90%;
-}
-
-#character-switch {
-    position: absolute;
-    top: 90%;
-    bottom: 0;
-    left: 20%;
-    right: 20%;
-    width: 60%;
-    max-width: 60%;
-    height: 10%;
-    display: none;
-    background: red;
+    height: 100%;
 }
 
 #profile-frame {
@@ -70,11 +69,32 @@ html, body {
     display: none;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
+#character-switch {
+    position: absolute;
+    top: 90%;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    width: 60%;
+    max-width: 60%;
+    height: 10%;
+    display: none;
+    background: #0E0B06;
+    white-space: normal;
+}
+
+#character-switch input {
+    height: 100%;
+    text-align: center;
+    white-space: normal;
+    vertical-align: middle;
+    // Appearance
+    color: white;
+    border-radius: 4px;
+    font-family: DOS, Monospace;
+    font-size: 18px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    background: #0F1721;
 }
 
 a {

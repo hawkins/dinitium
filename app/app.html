@@ -17,8 +17,8 @@
     <iframe id="profile-frame" src="https://www.playinitium.com/profile.jsp" frameborder="0"></iframe>
     <iframe id="main-frame" src="http://www.playinitium.com" frameborder="0"></iframe>
     <iframe id="inventory-frame" src="https://www.playinitium.com/inventory.jsp" frameborder="0"></iframe>
-    <div id="character-switch">
-    </div>
+    <table id="character-switch">
+    </table>
 
     <div style="display:none;" class="container">
         <h1 id="greet"></h1>
@@ -150,7 +150,7 @@
             var e = document.getElementById('character-switch');
             var m = document.getElementById('main-frame');
             // Now toggle
-            if(e.style.display == 'block') {
+            if(e.style.display == 'table') {
                 // Hide it
                 e.style.display = 'none';
                 // Resize main frame
@@ -166,9 +166,41 @@
                     // ... // Append to character switcher
                     // ... document.getElementById('character-switch').append(...);
                     for (var i=0; i < listOfChars.children.length; i++) {
-                        console.log(listOfChars.children[i].children[0]);
-                        // NOTE: NEED TO Modify link to direct to main-frame
-                        e.appendChild(listOfChars.children[i].children[0])
+                        // Define element to append to character-switch
+                        var newElem = document.createElement("input");
+                        newElem.type = "button";
+                        newElem.value = listOfChars.children[i].children[0].text;
+                        newElem.style.width = (100 / listOfChars.children.length).toString() + "%";
+                        // Check if equivalent button exists already
+                        var matchFound = false;
+                        for (var j = 0; j < e.children.length; j++) {
+                            if (e.children[j].value == newElem.value) {
+                                // Duplicate found, do not append this one
+                                matchFound = true;
+                                break;
+                            }
+                        }
+                        if (matchFound) {
+                            // We found an equivalent button so let's skip to next iteration of for loop
+                            continue;
+                        }
+                        
+                        // At this point we have not found an equivalent button
+                        // Add listener for click
+                        newElem.onclick = function () {
+                            //// Switch to character by setting link
+                            // First find link
+                            var listOfChars = document.getElementById('main-frame').contentWindow.document.getElementsByClassName('switch-characters-list')[0];
+                            for (var i = 0; i < listOfChars.children.length; i++) {
+                                // If the focused link matches the button clicked
+                                if (listOfChars.children[i].children[0].text == this.value) {
+                                    // Then load the link
+                                    document.getElementById('main-frame').src = listOfChars.children[i].children[0].href;
+                                }
+                            }
+                        }
+                        // Finally append it to character-switch
+                        e.appendChild(newElem);
                     }
                 }
                 catch (err) {
@@ -176,7 +208,7 @@
                     console.log("Encountered error when toggling character switch. Are we logged in yet? " + err);
                 }
                 // Now reveal the frame
-                e.style.display = 'block';
+                e.style.display = 'table';
                 // Resize main frame
                 m.style.height = '90%';
                 m.style.bottom = '10%';
@@ -191,32 +223,6 @@
                 toggleCharacterSwitch(response);
             }
         });
-
-        //// Key listener changes
-        //// Replaced with simpler menu bar instead
-        // var iframe = document.getElementById('main-frame');
-        // iframe.onload = function () {
-        //     Remove default event listener by disabling all shortcuts
-        //     Abuses Nik's implementation in script.js line 941, $(document).keyup(function(event)){...}
-        //     iframe.contentWindow.disableShortcuts = true;
-        //     // Substitute new event listener
-        //     iframe.contentWindow.document.onkeydown = function (e) {
-        //         var code = e.keyCode ? e.keyCode : e.which;
-        //         // Make sure we're not pressing control (because we use it in menu items)
-        //         if (code === 17) {
-        //             // CTRL is pushed
-        //             return;
-        //         }
-        //         if (code === 73) {
-        //             // Open inventory
-        //             toggleInventory();
-        //         }
-        //         else if (code === 80) {
-        //             // Open profile
-        //             toggleProfile();
-        //         }
-        //     }
-        // }
     </script>
 </body>
 </html>
